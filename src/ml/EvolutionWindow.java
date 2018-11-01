@@ -7,8 +7,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
