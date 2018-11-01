@@ -62,6 +62,7 @@ public class EvolutionWindow {
 	}
 	
 	public void updateData(double[] fitnesses) {
+		fitnesses = sortArray(fitnesses);
 		int partLength = (int) (fitnesses.length/data.length);
 		double[] percentageValues = new double[data.length];
 		int partCounter = 0;
@@ -69,7 +70,9 @@ public class EvolutionWindow {
 			double averageOfPart = calcAverage(getArraySlice(fitnesses, i * partLength, (i+1) * partLength));
 			data[i] = addToArray(data[i], averageOfPart);
 		}
-		
+		bestData.add(fitnesses[0]);
+		medianData.add(calcAverage(fitnesses));
+		worstData.add(fitnesses[fitnesses.length - 1]);
 	}
 
 	private double calcAverage(double[] array) {
@@ -90,6 +93,9 @@ public class EvolutionWindow {
 
 	public void updateLines() {
 		scale = (height/getHighestScore()) * 0.5;
+		for(int i = 0; i < dataLines.length; i++) {
+			updateLine(i);
+		}
 		updateBestLine();
 		updateMedianLine();
 		updateWorstLine();
@@ -177,6 +183,12 @@ public class EvolutionWindow {
 			g.drawLine((int)line.getX1(), (int)line.getY1(), (int)line.getX2(), (int)line.getY2());
 		}
 		g.setColor(Color.BLACK);
+		for(Line[] lines : dataLines) {
+			for(Line line : lines) {
+				g.drawLine((int)line.getX1(), (int)line.getY1(), (int)line.getX2(), (int)line.getY2());
+			}
+		}
+		g.setColor(Color.GREEN);
 		for(Line line : bestLines) {
 			g.drawLine((int)line.getX1(), (int)line.getY1(), (int)line.getX2(), (int)line.getY2());
 		}
@@ -184,7 +196,7 @@ public class EvolutionWindow {
 		for(Line line : medianLines) {
 			g.drawLine((int)line.getX1(), (int)line.getY1(), (int)line.getX2(), (int)line.getY2());
 		}
-		g.setColor(Color.BLACK);
+		g.setColor(Color.BLUE);
 		for(Line line : worstLines) {
 			g.drawLine((int)line.getX1(), (int)line.getY1(), (int)line.getX2(), (int)line.getY2());
 		}
@@ -200,6 +212,21 @@ public class EvolutionWindow {
 			if(v > highest) highest = v;
 		}
 		return highest;
+	}
+	
+	public double[] sortArray(double[] array) {
+		double temp;
+		for(int i = 1; i < array.length; i++) {
+			for(int j=0; j<array.length-i; j++) {
+				if(array[j] > array[j+1]) {
+					temp = array[j];
+					array[j] = array[j+1];
+					array[j+1] = temp;
+				}
+				
+			}
+		}
+		return array;
 	}
 	
 	private double[] convertArrayListToArray(ArrayList<Double> arrayList) {
