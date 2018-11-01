@@ -71,7 +71,7 @@ public class EvolutionWindow {
 			data[i] = addToArray(data[i], averageOfPart);
 		}
 		bestData.add(fitnesses[0]);
-		medianData.add(calcAverage(fitnesses));
+		medianData.add(fitnesses[fitnesses.length/2]);
 		worstData.add(fitnesses[fitnesses.length - 1]);
 	}
 
@@ -93,7 +93,8 @@ public class EvolutionWindow {
 
 	public void updateLines() {
 		scale = (height/getHighestScore()) * 0.5;
-		for(int i = 0; i < dataLines.length; i++) {
+		dataLines = new Line[data.length][];
+		for(int i = 0; i < data.length; i++) {
 			updateLine(i);
 		}
 		updateBestLine();
@@ -105,8 +106,8 @@ public class EvolutionWindow {
 	private void updateLine(int index) {
 		int indexLength = data[index].length;
 		dataLines[index] = new Line[indexLength-1];
-		double linelength = width / (data.length+1);
-		for(int i = 0; i < data[index].length; i++) {
+		double linelength = width / (indexLength);
+		for(int i = 0; i < indexLength - 1; i++) {
 			dataLines[index][i] = new Line(
 					linelength/2 + linelength * i,
 					height-(data[index][i]*scale) - height*0.1,
@@ -189,17 +190,33 @@ public class EvolutionWindow {
 			}
 		}
 		g.setColor(Color.GREEN);
-		for(Line line : bestLines) {
+		for(Line line : bestLines) {	// thickness of 3
+			g.drawLine((int)line.getX1(), (int)line.getY1()-1, (int)line.getX2(), (int)line.getY2()-1);
 			g.drawLine((int)line.getX1(), (int)line.getY1(), (int)line.getX2(), (int)line.getY2());
-		}
-		g.setColor(Color.RED);
-		for(Line line : medianLines) {
+			g.drawLine((int)line.getX1(), (int)line.getY1()+1, (int)line.getX2(), (int)line.getY2()+1);
+			g.drawLine((int)line.getX1()-1, (int)line.getY1(), (int)line.getX2()-1, (int)line.getY2());
 			g.drawLine((int)line.getX1(), (int)line.getY1(), (int)line.getX2(), (int)line.getY2());
+			g.drawLine((int)line.getX1()+1, (int)line.getY1(), (int)line.getX2()+1, (int)line.getY2());
 		}
 		g.setColor(Color.BLUE);
-		for(Line line : worstLines) {
+		for(Line line : medianLines) {	// thickness of 3
+			g.drawLine((int)line.getX1(), (int)line.getY1()-1, (int)line.getX2(), (int)line.getY2()-1);
 			g.drawLine((int)line.getX1(), (int)line.getY1(), (int)line.getX2(), (int)line.getY2());
+			g.drawLine((int)line.getX1(), (int)line.getY1()+1, (int)line.getX2(), (int)line.getY2()+1);
+			g.drawLine((int)line.getX1()-1, (int)line.getY1(), (int)line.getX2()-1, (int)line.getY2());
+			g.drawLine((int)line.getX1(), (int)line.getY1(), (int)line.getX2(), (int)line.getY2());
+			g.drawLine((int)line.getX1()+1, (int)line.getY1(), (int)line.getX2()+1, (int)line.getY2());
 		}
+		g.setColor(Color.RED);
+		for(Line line : worstLines) {	// thickness of 3
+			g.drawLine((int)line.getX1(), (int)line.getY1()-1, (int)line.getX2(), (int)line.getY2()-1);
+			g.drawLine((int)line.getX1(), (int)line.getY1(), (int)line.getX2(), (int)line.getY2());
+			g.drawLine((int)line.getX1(), (int)line.getY1()+1, (int)line.getX2(), (int)line.getY2()+1);
+			g.drawLine((int)line.getX1()-1, (int)line.getY1(), (int)line.getX2()-1, (int)line.getY2());
+			g.drawLine((int)line.getX1(), (int)line.getY1(), (int)line.getX2(), (int)line.getY2());
+			g.drawLine((int)line.getX1()+1, (int)line.getY1(), (int)line.getX2()+1, (int)line.getY2());
+		}
+		g.setColor(Color.BLACK);
 		for(JTextField field : tfScales) {
 			g.drawString(field.getText(), field.getX(), field.getY());
 		}
@@ -217,8 +234,8 @@ public class EvolutionWindow {
 	public double[] sortArray(double[] array) {
 		double temp;
 		for(int i = 1; i < array.length; i++) {
-			for(int j=0; j<array.length-i; j++) {
-				if(array[j] > array[j+1]) {
+			for(int j=0; j < array.length-i; j++) {
+				if(array[j] < array[j+1]) {
 					temp = array[j];
 					array[j] = array[j+1];
 					array[j+1] = temp;
