@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
@@ -55,17 +56,38 @@ public class EvolutionWindow {
 			data[i] = new double[0];
 		}
 		
-//		bestData = new ArrayList<Double>();
-//		medianData = new ArrayList<Double>();
-//		worstData = new ArrayList<Double>();
+		bestData = new ArrayList<Double>();
+		medianData = new ArrayList<Double>();
+		worstData = new ArrayList<Double>();
 	}
 	
-	public void updateData(double[] data) {
-		bestData.add(data[0]);
-		medianData.add(data[0]);
-		worstData.add(data[0]);
+	public void updateData(double[] fitnesses) {
+		int partLength = (int) (fitnesses.length/data.length);
+		double[] percentageValues = new double[data.length];
+		int partCounter = 0;
+		for(int i = 0; i < data.length; i++) {
+			double averageOfPart = calcAverage(getArraySlice(fitnesses, i * partLength, (i+1) * partLength));
+			data[i] = addToArray(data[i], averageOfPart);
+		}
+		
+	}
+
+	private double calcAverage(double[] array) {
+		double result = 0;
+		for(double v : array) {
+			result += v;
+		}
+		return result/array.length;
 	}
 	
+	private double[] getArraySlice(double[] fitnesses, int start, int end) {
+		double[] newArray = new double[end-start];
+		for(int i = 0; i < newArray.length; i++) {
+			newArray[i] = fitnesses[i+start];
+		}
+		return newArray;
+	}
+
 	public void updateLines() {
 		scale = (height/getHighestScore()) * 0.5;
 		updateBestLine();
@@ -186,6 +208,15 @@ public class EvolutionWindow {
 			array[i] = arrayList.get(i);
 		}
 		return array;
+	}
+	
+	private double[] addToArray(double[] array, double value) {
+		double[] newArray = new double[array.length+1];
+		for(int i = 0; i < array.length; i++) {
+			newArray[i] = array[i];
+		}
+		newArray[newArray.length - 1] = value;
+		return newArray;
 	}
 	
 	private int getTensPotency(double d) {
