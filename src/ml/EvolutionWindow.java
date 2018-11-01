@@ -16,7 +16,7 @@ import ml.WindowComponents.Line;
 
 public class EvolutionWindow {
 	private JFrame window;
-	private int width, height, population;
+	private int width, height;
 	private Canvas canvas;
 	private BufferStrategy bs;
 	private Graphics g;
@@ -27,10 +27,9 @@ public class EvolutionWindow {
 	private double[][] data;
 	private JTextField[] tfScales;
 	
-	public EvolutionWindow(int width, int height, int population) {
+	public EvolutionWindow(int width, int height) {
 		this.width = width;
 		this.height = height;
-		this.population = population;
 		canvas = new Canvas();
 		Dimension s = new Dimension(width, height);
 		canvas.setPreferredSize(s);
@@ -64,8 +63,6 @@ public class EvolutionWindow {
 	public void updateData(double[] fitnesses) {
 		fitnesses = sortArray(fitnesses);
 		int partLength = (int) (fitnesses.length/data.length);
-		double[] percentageValues = new double[data.length];
-		int partCounter = 0;
 		for(int i = 0; i < data.length; i++) {
 			double averageOfPart = calcAverage(getArraySlice(fitnesses, i * partLength, (i+1) * partLength));
 			data[i] = addToArray(data[i], averageOfPart);
