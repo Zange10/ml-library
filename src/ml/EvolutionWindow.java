@@ -15,18 +15,20 @@ import ml.WindowComponents.Line;
 
 public class EvolutionWindow {
 	private JFrame window;
-	private int width, height;
+	private int width, height, population;
 	private Canvas canvas;
 	private BufferStrategy bs;
 	private Graphics g;
 	private Line[] scaleLines, bestLines, medianLines, worstLines;
 	private double scale;
 	private ArrayList<Double> bestData, medianData, worstData;
+	private double[][] data;
 	private JTextField[] tfScales;
 	
-	public EvolutionWindow(int width, int height) {
+	public EvolutionWindow(int width, int height, int population) {
 		this.width = width;
 		this.height = height;
+		this.population = population;
 		canvas = new Canvas();
 		Dimension s = new Dimension(width, height);
 		canvas.setPreferredSize(s);
@@ -47,15 +49,20 @@ public class EvolutionWindow {
 		bs = canvas.getBufferStrategy();
 		g = bs.getDrawGraphics();
 		
-		bestData = new ArrayList<Double>();
-		medianData = new ArrayList<Double>();
-		worstData = new ArrayList<Double>();
+		data = new double[10][];
+		for(int i = 0; i < data.length; i++) {
+			data[i] = new double[0];
+		}
+		
+//		bestData = new ArrayList<Double>();
+//		medianData = new ArrayList<Double>();
+//		worstData = new ArrayList<Double>();
 	}
 	
-	public void updateData(double best, double median, double worst) {
-		bestData.add(best);
-		medianData.add(median);
-		worstData.add(worst);
+	public void updateData(double[] data) {
+		bestData.add(data[0]);
+		medianData.add(data[0]);
+		worstData.add(data[0]);
 	}
 	
 	public void updateLines() {
@@ -70,10 +77,6 @@ public class EvolutionWindow {
 		double[] data = convertArrayListToArray(bestData);
 		bestLines = new Line[data.length-1];
 		double linelength = width / (bestLines.length+1);
-//		double highest = getHighestScore();
-//		double lowest = getLowestScore();
-//		if(highest-lowest != 0.0) scale = height/highest;
-//		else scale = 1;
 		for(int i = 0; i < bestLines.length; i++) {
 			bestLines[i] = new Line(
 					linelength/2 + linelength * i,
@@ -87,10 +90,6 @@ public class EvolutionWindow {
 		double[] data = convertArrayListToArray(medianData);
 		medianLines = new Line[data.length-1];
 		double linelength = width / (medianLines.length+1);
-//		double highest = getHighestScore();
-//		double lowest = getLowestScore();
-//		if(highest-lowest != 0.0) scale = height/highest;
-//		else scale = 1;
 		for(int i = 0; i < medianLines.length; i++) {
 			medianLines[i] = new Line(
 					linelength/2 + linelength * i,
@@ -104,10 +103,6 @@ public class EvolutionWindow {
 		double[] data = convertArrayListToArray(worstData);
 		worstLines = new Line[data.length-1];
 		double linelength = width / (worstLines.length+1);
-//		double highest = getHighestScore();
-//		double lowest = getLowestScore();
-//		if(highest-lowest != 0.0) scale = height/highest;
-//		else scale = 1;
 		for(int i = 0; i < worstLines.length; i++) {
 			worstLines[i] = new Line(
 					linelength/2 + linelength * i,
@@ -122,15 +117,8 @@ public class EvolutionWindow {
 		int potency;
 		if(highest != 0) potency = getTensPotency(highest);
 		else potency = 0;
-//		scale = height/highest*0.5;
 		scaleLines = new Line[21];
-//		int c = 1;
-//		while(highest < 11*Math.pow(10, potency) / c) {
-//			scale /= 2;
-//			c++;
-//		}
 		for(int i = 0; i < scaleLines.length; i++) {
-//			double x = height - 2*i*Math.pow(10, potency) * scale - height*0.1;
 			double x = height-(i*Math.pow(10, potency))*scale - height*0.1;
 			scaleLines[i] = new Line(0, x, width, x);
 		}
@@ -177,14 +165,6 @@ public class EvolutionWindow {
 		}
 		return highest;
 	}
-	
-//	private double getLowestScore() {
-//		double lowest = worstData.get(0);
-//		for(double v : worstData) {
-//			if(v < lowest) lowest = v;
-//		}
-//		return lowest;
-//	}
 	
 	private double[] convertArrayListToArray(ArrayList<Double> arrayList) {
 		double[] array = new double[arrayList.size()];
