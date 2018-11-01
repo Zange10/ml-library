@@ -20,6 +20,7 @@ public class EvolutionWindow {
 	private BufferStrategy bs;
 	private Graphics g;
 	private Line[] scaleLines, bestLines, medianLines, worstLines;
+	private Line[][] dataLines;
 	private double scale;
 	private ArrayList<Double> bestData, medianData, worstData;
 	private double[][] data;
@@ -71,6 +72,19 @@ public class EvolutionWindow {
 		updateMedianLine();
 		updateWorstLine();
 		updateScaleLines();
+	}
+	
+	private void updateLine(int index) {
+		int indexLength = data[index].length;
+		dataLines[index] = new Line[indexLength-1];
+		double linelength = width / (data.length+1);
+		for(int i = 0; i < data[index].length; i++) {
+			dataLines[index][i] = new Line(
+					linelength/2 + linelength * i,
+					height-(data[index][i]*scale) - height*0.1,
+					linelength/2 + linelength * (i+1),
+					height-(data[index][i+1]*scale) - height*0.1);
+		}
 	}
 	
 	private void updateBestLine() {
