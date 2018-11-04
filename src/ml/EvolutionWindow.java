@@ -41,6 +41,7 @@ public class EvolutionWindow {
 		window.add(canvas, BorderLayout.CENTER);
 		window.pack();
 		window.setLocationRelativeTo(null);
+		window.setLocation(x,  y);
 		window.setResizable(false);
 		window.setVisible(true);
 		
