@@ -9,13 +9,13 @@ public class Test {
 	public static void main(String[] args) {
 //		EvolutionWindow ew = new EvolutionWindow(500, 500);
 
-		int numInputs = 2;
-		double[] numHidden = new double[]{9, 6};
-		int numOutputs = 1;
+		int numInputs = 1 * (2 + 28*2);
+		double[] numHidden = new double[]{1 * (2 + 28*2), 1 * (2 + 28*2)};
+		int numOutputs = 28*1;
 		
 		NeuralNetwork brain1 = new NeuralNetwork(numInputs, numHidden, numOutputs);
 //		NeuralNetwork brain2 = new NeuralNetwork(numInputs, numHidden, numOutputs);
-		NetworkWindow nw = new NetworkWindow(numInputs, numHidden, numOutputs);
+		NetworkWindow nw = new NetworkWindow(500, 500, numInputs, numHidden, numOutputs);
 //		double[] fitnesses = new double[2];
 
 		double[][][] target = new double[4][2][];

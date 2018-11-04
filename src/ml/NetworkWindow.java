@@ -22,15 +22,19 @@ public class NetworkWindow {
 	private Line[][] lines;
 	private int spaceScale;
 	
-	public NetworkWindow(int numInputs, double[] numHidden, int numOutputs) {
+	public NetworkWindow(int x, int y, int numInputs, double[] numHidden, int numOutputs) {
 		neuronDiameter = 10;
 		spaceScale = 3;
 		this.numInputs = numInputs;
 		this.numHidden = convertToIntArray(numHidden);
 		this.numOutputs = numOutputs;
 		biggestLayerSize = getBiggestLayerSize();
-		this.width = (int) ((1 + numHidden.length + 1) * neuronDiameter * 4 * spaceScale);
-		this.height = (int) ((biggestLayerSize + 1/*bias*/) * 2 * spaceScale * neuronDiameter + neuronDiameter * 0.5 * spaceScale);
+		while(spaceScale > 1) {
+			this.width = (int) ((1 + numHidden.length + 1) * neuronDiameter * 4 * spaceScale);
+			this.height = (int) ((biggestLayerSize + 1/*bias*/) * 2 * spaceScale * neuronDiameter + neuronDiameter * 0.5 * spaceScale);
+			if(height > 1000) spaceScale--;
+			else break;
+		}
 		canvas = new Canvas();
 		Dimension s = new Dimension(width, height);
 		canvas.setPreferredSize(s);

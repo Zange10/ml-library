@@ -25,7 +25,7 @@ public class EvolutionWindow {
 	private double[][] data;
 	private JTextField[] tfScales;
 	
-	public EvolutionWindow(int width, int height) {
+	public EvolutionWindow(int x, int y, int width, int height) {
 		this.width = width;
 		this.height = height;
 		canvas = new Canvas();
