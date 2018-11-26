@@ -23,18 +23,29 @@ public class NetworkWindow {
 	private int spaceScale;
 	
 	public NetworkWindow(int x, int y, int numInputs, double[] numHidden, int numOutputs) {
+		createNewNetwork(numInputs, numHidden, numOutputs);
+		CreateWindow(x, y);
+	}
+	
+	public NetworkWindow(int x, int y) {
+		width = 500;
+		height = 500;
+		CreateWindow(x, y);
+	}
+	
+	public NetworkWindow(int numInputs, double[] numHidden, int numOutputs) {
+		createNewNetwork(numInputs, numHidden, numOutputs);
+		CreateWindow(0, 0);
+	}
+	
+	public NetworkWindow() {
+		CreateWindow(0, 0);
+	}
+		
+	private void createWindow(int x, int y) {
 		neuronDiameter = 10;
 		spaceScale = 3;
-		this.numInputs = numInputs;
-		this.numHidden = convertToIntArray(numHidden);
-		this.numOutputs = numOutputs;
-		biggestLayerSize = getBiggestLayerSize();
-		while(spaceScale > 1) {
-			this.width = (int) ((1 + numHidden.length + 1) * neuronDiameter * 4 * spaceScale);
-			this.height = (int) ((biggestLayerSize + 1/*bias*/) * 2 * spaceScale * neuronDiameter + neuronDiameter * 0.5 * spaceScale);
-			if(height > 1000) spaceScale--;
-			else break;
-		}
+		
 		canvas = new Canvas();
 		Dimension s = new Dimension(width, height);
 		canvas.setPreferredSize(s);
@@ -55,7 +66,19 @@ public class NetworkWindow {
 		canvas.createBufferStrategy(2);
 		bs = canvas.getBufferStrategy();
 		g = bs.getDrawGraphics();
-		
+	}
+	
+	public void createNewNetwork(int numInputs, double[] numHidden, int numOutputs) {
+		this.numInputs = numInputs;
+		this.numHidden = convertToIntArray(numHidden);
+		this.numOutputs = numOutputs;
+		biggestLayerSize = getBiggestLayerSize();
+		while(spaceScale > 1) {
+			this.width = (int) ((1 + numHidden.length + 1) * neuronDiameter * 4 * spaceScale);
+			this.height = (int) ((biggestLayerSize + 1/*bias*/) * 2 * spaceScale * neuronDiameter + neuronDiameter * 0.5 * spaceScale);
+			if(height > 1000) spaceScale--;
+			else break;
+		}
 		createNetwork(numInputs, this.numHidden, numOutputs);
 	}
 	
@@ -113,12 +136,6 @@ public class NetworkWindow {
 			}
 		}
 	}
-
-//	3 0 0
-//	3 0 1
-//	3 1 0
-//	3 1 1
-//	3 2 0
 	
 	public void updateData(double[][] weights, double[][] biases) {
 		for(int i = 0; i < lines.length; i++) {
