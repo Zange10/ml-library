@@ -44,6 +44,8 @@ public class EvolutionWindow {
 		window.setLocation(x,  y);
 		window.setResizable(false);
 		window.setVisible(true);
+
+		time.Time.wait(50);	// make shure that everything is visible
 		
 		canvas.createBufferStrategy(2);
 		bs = canvas.getBufferStrategy();

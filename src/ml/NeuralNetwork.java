@@ -77,11 +77,15 @@ public class NeuralNetwork {
 	}
 	
 	public void train(double[] inputArray, double[] targetArray) {
+		long buffertime = System.currentTimeMillis();
 		double[] outputArray = feedforward(inputArray);
 		
 		Matrix inputs = Matrix.convertFromArray(inputArray);
 		Matrix outputs = Matrix.convertFromArray(outputArray);
 		Matrix targets = Matrix.convertFromArray(targetArray);
+		
+//		System.out.println("ff: " + (System.currentTimeMillis()-buffertime));
+//		buffertime = System.currentTimeMillis();
 		
 		// calculate the errors of the outputs
 		// ERROR = TARGETS - OUTPUTS
@@ -100,11 +104,12 @@ public class NeuralNetwork {
 		for(int i = 0; i < hidden.length; i++) {
 			hidden_T[i] = Matrix.transpose(hidden[i]);
 		}
-
-
+		
+//		System.out.println("test: " + (System.currentTimeMillis()-buffertime));
+//		buffertime = System.currentTimeMillis();
+		
 		Matrix[] weightDeltas = new Matrix[numHidden.length+1];
 		weightDeltas[numHidden.length] = Matrix.getMatrixProduct(outputGradients, hidden_T[hidden_T.length-1]);
-		
 				
 //		Matrix[] weightDeltas = new Matrix[numHidden+1];
 //		weightDeltas[0] = Matrix.getMatrixProduct(gradients, hidden_T);
@@ -122,6 +127,9 @@ public class NeuralNetwork {
 		for(int i = 0; i < weights_T.length; i++) {
 			weights_T[i] = Matrix.transpose(weights[i]);
 		}
+		
+//		System.out.println("1st: " + (System.currentTimeMillis()-buffertime));
+//		buffertime = System.currentTimeMillis();
 		
 
 		Matrix[] hiddenErrors = new Matrix[numHidden.length];		// other way round counted
@@ -152,6 +160,9 @@ public class NeuralNetwork {
 		// adjust weights and bias by deltas
 		weights[0].addMatrix(weightDeltas[0]);
 		biases[0].addMatrix(hiddenGradients[hiddenGradients.length - 1]);
+		
+//		System.out.println("2nd: " + (System.currentTimeMillis()-buffertime));
+//		buffertime = System.currentTimeMillis();
 	}
 	
 	
