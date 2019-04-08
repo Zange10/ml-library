@@ -90,7 +90,7 @@ public class EvolutionWindow {
 	}
 
 	public void updateLines() {
-		scale = (height/getHighestScore()) * 0.5;
+		scale = (height/getHighestScore()) * 0.75;
 		dataLines = new Line[data.length][];
 		for(int i = 0; i < data.length; i++) {
 			updateLine(i);
@@ -158,20 +158,29 @@ public class EvolutionWindow {
 		int potency;
 		if(highest != 0) potency = getTensPotency(highest);
 		else potency = 0;
+		int step = 1;
+		if(potency != 0) {
+			step = (int)((int) ((highest / Math.pow(10, potency-1)) / 10));
+			step *= Math.pow(10, potency-1);
+			System.out.println(step);
+		}
 		scaleLines = new Line[21];
 		for(int i = 0; i < scaleLines.length; i++) {
-			double x = height-(i*Math.pow(10, potency))*scale - height*0.1;
-			scaleLines[i] = new Line(0, x, width, x);
+//			double y = height-(i*Math.pow(10, potency))*scale - height*0.1;
+			double y = height-(i*step)*scale - height*0.1;
+			scaleLines[i] = new Line(0, y, width, y);
 		}
 		tfScales = new JTextField[21];
 		for(int i = 0; i < scaleLines.length; i++) {
 			tfScales[i] = new JTextField();
 			tfScales[i].setBounds(
 					1,
-					(int) (height-(i*Math.pow(10, potency))*scale - height*0.067) - height/20,
+//					(int) (height-(i*Math.pow(10, potency))*scale - height*0.067) - height/20,
+					(int) (height-(i*step)*scale - height*0.067) - height/20,
 					width/40,
 					height/20);
-			tfScales[i].setText(String.valueOf(i*Math.pow(10, potency)));
+//			tfScales[i].setText(String.valueOf(i*Math.pow(10, potency)));
+			tfScales[i].setText(String.valueOf(i*step));
 		}
 	}
 

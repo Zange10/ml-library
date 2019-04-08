@@ -256,6 +256,24 @@ public class NeuralNetwork {
 		}
 	}
 	
+	// return : count of layers .. count of Inputs .. count of Hidden (specific) .. count of Outputs .. all weights
+	public String NetworkToString() {
+		double[][][] dna = getDNA();
+		String s;
+		s = (numHidden.length + 2) + " " + numInputs + " ";
+		for(int i = 0; i < numHidden.length; i++) {
+			s += numHidden[i] + " ";
+		}
+		s += numOutputs + " ";
+		for(int i = 0; i < dna.length; i++) {
+			for(int j = 0; j < dna[i].length; j++) {
+				for(int k = 0; k < dna[i][j].length; k++) {
+					s += dna[i][j][k] + " ";
+				}
+			}
+		}
+		return s;
+	}
 	
 	
 	// Getters and Setters -------------------------------------------------------------------------------------
